@@ -145,12 +145,14 @@ class PostAiView(View):
                     if result['success']:
                         _class = result['estimated_data']['class']
                         confidence = result['estimated_data']['confidence']
+                        message = '保存が完了しました。'
                     else:
                         _class = None
                         confidence = None
+                        message = '解析に失敗しました。<br>' + result['message']
 
                     AiAnalysisLog(
-                        image_path=request.POST.get('image_path'),
+                        image_path=str(request.POST.get('image_path')),
                         success=result['success'],
                         message=result['message'],
                         _class=_class,
@@ -158,7 +160,6 @@ class PostAiView(View):
                         request_timestamp=request_timestamp,
                         response_timestamp=response_timestamp,
                     ).save()
-                    message = '保存が完了しました。'
                 else:
                     message = 'apiのcontent-typeが変更になったようです。<br>URL:' + url
             except Exception as error:
