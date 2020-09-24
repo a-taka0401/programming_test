@@ -24,7 +24,6 @@ class MockView(View):
         Returns
         -------
         context : dict
-            formというkeyにImagePathFormというformobjectが入っています。
         """
         form = ImagePathForm
         template = './app/mock.html'
@@ -39,12 +38,10 @@ class MockView(View):
         Parameters
         ----------
         image_path : str
-            フォームに入力された画像のpath(モックのため使われていない)。
 
         Returns
         -------
         response : Json
-            messageというkeyにAPIを叩いた結果が入っています。
         """
         form = ImagePathForm(request.POST)
         if form.is_valid():
@@ -106,7 +103,6 @@ class PostAiView(View):
         Returns
         -------
         context : dict
-            formというkeyにImagePathFormというformobjectが入っています。
         """
         form = ImagePathForm
         template = './app/post_api.html'
@@ -121,12 +117,10 @@ class PostAiView(View):
         Parameters
         ----------
         image_path : str
-            フォームに入力された画像のpath。
 
         Returns
         -------
         response : Json
-            messageというkeyにAPIを叩いた結果どうなったかが入っています。
         """
         form = ImagePathForm(request.POST)
         if form.is_valid():
