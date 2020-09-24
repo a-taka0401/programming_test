@@ -1,0 +1,22 @@
+{% extends "./base.html" %} {%block content %}
+<div class='container'>
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">モック版とAPI版をどちらかを選んでください。</h1>
+			<p class="lead text-muted">モック版はランダムでエラーとサクセスを吐き出します。<br>API版はAPIが実装されていないので通信に失敗したというエラーを吐き出します。</p>
+			<p>
+				<a href="{% url 'app:mock' %}" class="btn btn-primary">モック版</a>
+				<a href="{% url 'app:api' %}" class="btn btn-secondary">API版</a>
+			</p>
+		</div>
+	</section>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    $(window).on('load',function(){
+        $('#home').addClass('active');
+    });
+</script>
+{% endblock %}

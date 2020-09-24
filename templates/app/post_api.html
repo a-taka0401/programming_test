@@ -1,0 +1,106 @@
+{% extends "./base.html" %} {%block content %}
+<div class='container'>
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">画像のパスを入力してください</h1>
+            <p class="lead text-muted">apiが存在していないため通信自体が失敗したエラーが出ます</p>
+            {% csrf_token %}
+            {{ form.errors}}
+            {{ form.image_path }}
+			<p>
+				<a href="#post" class="btn btn-primary" id="submit">POST</a>
+			</p>
+		</div>
+	</section>
+</div>
+
+<div class="modal js-modal">
+    <div class="modal__bg js-modal-close"></div>
+    <div class="modal__content text-center">
+        <h2 style="text-align:center">結果</h2>
+        <p id='modal-message'></p>
+        <div style="text-align:center; padding:10px 0;">
+            <button type="submit" class="js-modal-close close-btn" style="border: 1px solid #1E4E98; background: #3C74F7;">閉じる</button>
+        </div>
+    </div><!--modal__inner-->
+</div>
+
+
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% block extrajs %}
+<script>
+    $(window).on('load',function(){
+        $('#api').addClass('active');
+    });
+    $(function() {
+      $("#submit").on('click', function(){
+          recruitment($(this));
+      });
+    });
+    
+    function recruitment(btn)
+    {
+        function getCookie(name) {
+			// csrftokenを取得
+			var cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				var cookies = document.cookie.split(';');
+				for (var i = 0; i <= cookies.length; i++) {
+					var cookie = jQuery.trim(cookies[i]);
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		}
+
+		var csrftoken = getCookie('csrftoken');
+
+		function csrfSafeMethod(method) {
+			return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		}
+        $.ajaxSetup({
+			beforeSend: function(xhr, settings) {
+				if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+					xhr.setRequestHeader("X-CSRFToken", csrftoken);
+				}
+			}
+		});
+        console.log('Hoge');
+        $(document).ajaxSend(function() {
+            $("#overlay").fadeIn(500);
+        });
+        $.ajax({
+            url: '/api/',
+            type: "post",
+            dataType: "json",
+            data: {'image_path' : $("#{{ form.image_path.id_for_label }}").val()},
+            cache: false
+        }).done(function(data, textStatus, jqXHR) {
+            $("#overlay").fadeOut();
+            $('#modal-message').html(data.message)
+            $('.js-modal').fadeIn(400);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            $("#overlay").fadeOut();
+            $('#modal-message').html('エラーが発生しました。<br>error: ' + errorThrown)
+            $('.js-modal').fadeIn(400);
+        });
+        $('.js-modal-close').on('click',function(){
+            $('.js-modal').fadeOut();
+        });
+        $('.js-modal-close2').on('click',function(){
+            $('.js-modal2').fadeOut();
+        });
+    }
+</script>
+{% endblock %}

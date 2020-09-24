@@ -1,0 +1,49 @@
+{% extends "./base.html" %}
+{%block content %}
+
+<div class='container'>
+    <section class="text-center">
+        <div class="container">
+            <h1>保存済みログ一覧</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">image_path</th>
+                    <th scope="col">success</th>
+                    <th scope="col">message</th>
+                    <th scope="col">class</th>
+                    <th scope="col">confidence</th>
+                    <th scope="col">request_timestamp</th>
+                    <th scope="col">response_timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in object_list %}
+                        <tr>
+                            <th scope="row">{{ item.id }}</th>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.image_path }}</td>
+                            <td>{{ item.success }}</td>
+                            <td>{{ item.message }}</td>
+                            <td>{{ item.class }}</td>
+                            <td>{{ item.confidence }}</td>
+                            <td>{{ item.request_timestamp }}</td>
+                            <td>{{ item.response_timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include "./paginate.html" %}
+        </div>
+    </section>
+</div>
+
+{% endblock %}
+{% block extrajs %}
+<script>
+    $(window).on('load',function(){
+        $('#list').addClass('active');
+    });
+</script>
+{% endblock %}
